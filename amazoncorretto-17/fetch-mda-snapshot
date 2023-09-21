@@ -1,0 +1,84 @@
+#!/bin/bash
+
+#
+# Fetch the Shibboleth SNAPSHOT release to use.
+#
+# Requires:
+#
+# - wget
+# - xsltproc
+#
+
+#
+# Exit when any command fails
+#
+set -e
+
+#
+# Destination directory
+#
+DEST=fetched-${MDA_RELEASE}-$(date +%F)
+DEST2=fetched
+
+# Maven coordinates
+MVN_G=net.shibboleth.metadata
+MVN_A=mda-distribution
+MVN_R=snapshots
+MVN_V=$MDA_RELEASE-SNAPSHOT
+
+# Where to get things from
+MVN_DIST_DIR=https://build.shibboleth.net/maven/$MVN_R/net/shibboleth/metadata/$MVN_A/$MVN_V
+echo "MVN_DIST_DIR: $MVN_DIST_DIR"
+MDA_PREFIX=$MVN_A-$MVN_V
+echo "Prefix: $MDA_PREFIX"
+
+#
+# Pull the distribution's Maven metadata file.
+#
+META_TMP=maven-metadata.tmp
+rm -f $META_TMP
+wget -q -O $META_TMP $MVN_DIST_DIR/maven-metadata.xml
+
+#
+# Figure out what the latest version is called.
+#
+VSN_VALUE=`xsltproc snapshot-version.xsl $META_TMP`
+echo "VSN_VALUE: $VSN_VALUE"
+SRC_URI=$MVN_DIST_DIR/$MVN_A-$VSN_VALUE.tar.gz
+echo "SRC_URI: $SRC_URI"
+
+#
+# Clean temporary file.
+#
+rm -f $META_TMP
+
+# Fetch everything into a clean download directory
+rm -rf $DEST
+mkdir $DEST
+cd $DEST
+
+# Fetch the IdP release
+MDA_ARCHIVE=$MDA_PREFIX.tar.gz
+wget -O $MDA_ARCHIVE      $SRC_URI
+wget -O $MDA_ARCHIVE.sha1 $SRC_URI.sha1
+
+# Rewrite the SHA-1 checksum with a file name
+checksum=$(cat $MDA_ARCHIVE.sha1)
+echo $checksum $MDA_ARCHIVE>$MDA_ARCHIVE.sha1
+
+# Verify SHA-1 checksum on IdP release
+echo SHA-1 check for $MDA_ARCHIVE
+sha1sum --check $MDA_ARCHIVE.sha1
+
+# Unpack IdP and rename to standard directories
+tar xf $MDA_ARCHIVE
+mv $MDA_PREFIX mda-dist
+
+cd ..
+
+# Copy to normal "fetched" directory
+echo "Downloaded to $DEST, copying to $DEST2."
+rm -rf $DEST2
+cp -r $DEST $DEST2
+
+# End.

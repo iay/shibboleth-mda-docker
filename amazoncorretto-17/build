@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build $@ -t shibboleth-mda-docker:amazon17 .
