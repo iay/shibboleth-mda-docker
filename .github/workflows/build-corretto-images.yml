@@ -51,4 +51,5 @@ jobs:
         docker buildx build --platform=linux/amd64,linux/arm64 \
           --push \
           --tag ${{ secrets.DOCKER_USERNAME }}/shibboleth-mda-docker:amazon17 \
+          --tag ${{ secrets.DOCKER_USERNAME }}/shibboleth-mda-docker:latest \
           amazoncorretto-17
