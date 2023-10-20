@@ -15,6 +15,7 @@ The container image is available for `linux/amd64` and
 - The current SNAPSHOT version of Shibboleth MDA 0.10.0, at
   `/opt/mda`.
 - `git`
+- `openssl`
 - `wget`
 
 If you'd find additional tools useful for evaluations, please
