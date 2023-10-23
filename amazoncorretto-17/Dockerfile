@@ -27,7 +27,7 @@ LABEL maintainer="Ian Young <ian@iay.org.uk>"
 #
 # Pull in commonly required tools.
 #
-RUN yum -y install git openssl sudo wget which && \
+RUN yum -y install git opensc openssl softhsm sudo wget which && \
     yum clean all
 
 #
