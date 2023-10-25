@@ -15,7 +15,9 @@ The container image is available for `linux/amd64` and
 - The current SNAPSHOT version of Shibboleth MDA 0.10.0, at
   `/opt/mda`.
 - `git`
+- `opensc`
 - `openssl`
+- `softhsm`
 - `wget`
 
 If you'd find additional tools useful for evaluations, please
@@ -61,6 +63,11 @@ user@C17: ~ $ mda.sh --version
 You can now experiment with the latest MDA snapshot in a non-persistent
 environment: everything you do will be removed when you exit the
 container.
+
+The directory `/opt/mda/doc` within the container is owned by the
+command-line user. The `wiki` sub-directory may be of interest;
+it contains the example files from the online documentation along
+with additional data and scripts to allow them to be run in-place.
 
 ## Persistent state
 

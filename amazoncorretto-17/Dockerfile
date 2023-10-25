@@ -45,9 +45,6 @@ ADD profile.d/ /etc/profile.d/
 #
 WORKDIR /opt
 COPY --from=fetcher /opt/fetched/mda-dist /opt/mda
-#RUN wget --no-verbose https://archive.apache.org/dist/maven/maven-3/${mavenver}/binaries/apache-maven-${mavenver}-bin.tar.gz && \
-#    tar xfz apache-maven-${mavenver}-bin.tar.gz && \
-#    rm *.tar.gz
 
 #
 # Bootstrap script.
@@ -60,6 +57,12 @@ ADD bootstrap.sh /etc/bootstrap.sh
 RUN adduser user
 ENV userdir=/home/user
 WORKDIR ${userdir}
+
+#
+# Let the user modify the doc subdirectory and in particular
+# the examples within doc/wiki
+#
+RUN chown -R user:user /opt/mda/doc
 
 #
 # By default, run a login shell.
