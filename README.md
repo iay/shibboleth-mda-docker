@@ -21,7 +21,7 @@ The container image is available for `linux/amd64` and
 - `wget`
 
 If you'd find additional tools useful for evaluations, please
-raise an issue on the GitHub repository.
+raise an [issue][] on the GitHub [repository][].
 
 When you run the container, an initialisation script
 sets up a user environment (in `/home/user`,
@@ -29,18 +29,21 @@ as `user` 1000:1000) and opens a command prompt
 from which the MDA's command-line can be invoked as
 `mda.sh` in the usual way.
 
+[issue]: https://github.com/iay/shibboleth-mda-docker/issues
+[repository]: https://github.com/iay/shibboleth-mda-docker
+
 ## Quick start
 
 You can run a container based on this image as follows:
 
 ```bash
-docker run --rm -it ianayoung/shibboleth-mda-docker
+docker run --rm -it --pull always ianayoung/shibboleth-mda-docker
 ```
 
 Or, using `podman` instead of `docker`:
 
 ```bash
-podman run --rm -it docker.io/ianayoung/shibboleth-mda-docker
+podman run --rm -it --pull always docker.io/ianayoung/shibboleth-mda-docker
 ```
 
 In either case, you should receive output similar to the following:
@@ -64,10 +67,25 @@ You can now experiment with the latest MDA snapshot in a non-persistent
 environment: everything you do will be removed when you exit the
 container.
 
+## Wiki examples
+
 The directory `/opt/mda/doc` within the container is owned by the
 command-line user. The `wiki` sub-directory may be of interest;
 it contains the example files from the online documentation along
 with additional data and scripts to allow them to be run in-place.
+
+```bash
+cd /opt/mda/doc/wiki
+./run-all-examples.sh
+```
+
+Depending on your host environment, some of the examples may be unable
+to run with the amount of heap space allowed to Java by default. You
+can set this explicitly as follows:
+
+```bash
+JVMOPTS=-Xmx2G ./run-all-examples.sh
+```
 
 ## Persistent state
 
