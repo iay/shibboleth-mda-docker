@@ -6,7 +6,7 @@ FROM alpine:3 AS fetcher
 
 RUN apk add bash coreutils libxslt wget gpg
 
-ARG MDA_RELEASE=0.10.0
+ARG MDA_RELEASE=1.0.0
 
 WORKDIR /opt
 ADD fetch-mda-snapshot .

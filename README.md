@@ -12,7 +12,7 @@ The container image is available for `linux/amd64` and
 
 - Amazon Linux 2
 - Amazon Corretto 17
-- The current SNAPSHOT version of Shibboleth MDA 0.10.0, at
+- The current SNAPSHOT version of Shibboleth MDA 1.0.0, at
   `/opt/mda`.
 - `git`
 - `opensc`
@@ -60,7 +60,7 @@ At the prompt, invoke `mda.sh` to confirm that everything is working:
 
 ```bash
 user@C17: ~ $ mda.sh --version
-0.10.0-SNAPSHOT
+1.0.0-SNAPSHOT
 ```
 
 You can now experiment with the latest MDA snapshot in a non-persistent
