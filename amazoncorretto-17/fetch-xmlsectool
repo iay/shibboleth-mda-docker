@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#
+# Fetch the xmlsectool release to use.
+#
+# Requires:
+#
+# - wget
+# - xsltproc
+#
+
+#
+# Exit when any command fails
+#
+set -e
+
+FILEBASE="xmlsectool-${XMLSECTOOL_RELEASE}-bin"
+SRCDIR="https://shibboleth.net/downloads/tools/xmlsectool/${XMLSECTOOL_RELEASE}"
+SRCURL="${SRCDIR}/${FILEBASE}"
+
+echo "Base URL: ${SRCURL}"
+wget -q "${SRCURL}.zip"
+wget -q "${SRCURL}.zip.asc"
+
+gpg --import PGP_KEYS
+gpg --verify "${FILEBASE}.zip.asc"
+
+# End.

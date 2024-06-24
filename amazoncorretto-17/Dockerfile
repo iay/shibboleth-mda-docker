@@ -1,13 +1,35 @@
 #
-# First stage just acquires the distribution archive,
-# verifies and unpacks it.
+# First stage just acquires, verifies and unpacks
+# the distribution archives.
 #
 FROM alpine:3 AS fetcher
 
-RUN apk add bash coreutils libxslt wget gpg
+RUN apk add bash coreutils libxslt wget gpg gpg-agent
 
 ARG MDA_RELEASE=1.0.0
+ARG XMLSECTOOL_RELEASE=3.0.0
 
+#
+# Acquire, verify and extract the xmlsectool distribution.
+#
+# The distribution is unpacked into /opt/xmlsectool
+#
+WORKDIR /opt
+ADD fetch-xmlsectool .
+ADD PGP_KEYS .
+RUN ./fetch-xmlsectool
+RUN unzip xmlsectool-${XMLSECTOOL_RELEASE}-bin.zip
+RUN mv xmlsectool-${XMLSECTOOL_RELEASE} xmlsectool
+WORKDIR /opt/xmlsectool
+RUN chmod -R +r .
+RUN ln -s xmlsectool.sh xmlsectool
+RUN chmod +rx xmlsectool.sh xmlsectool
+
+#
+# Acquire, verify and extract the MDA distribution.
+#
+# The distribution is unpacked into /opt/fetched/mda-dist.
+#
 WORKDIR /opt
 ADD fetch-mda-snapshot .
 ADD snapshot-version.xsl .
@@ -41,10 +63,11 @@ ADD gpg-agent.conf /etc/gnupg/
 ADD profile.d/ /etc/profile.d/
 
 #
-# Install latest version of Maven.
+# Install latest version of MDA and xmlsectool.
 #
 WORKDIR /opt
 COPY --from=fetcher /opt/fetched/mda-dist /opt/mda
+COPY --from=fetcher /opt/xmlsectool       /opt/xmlsectool
 
 #
 # Bootstrap script.
