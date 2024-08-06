@@ -6,7 +6,7 @@ FROM alpine:3 AS fetcher
 
 RUN apk add bash coreutils libxslt wget gpg gpg-agent
 
-ARG MDA_RELEASE=1.0.0
+ARG MDA_RELEASE=0.10.0
 ARG XMLSECTOOL_RELEASE=3.0.0
 
 #
@@ -31,9 +31,8 @@ RUN chmod +rx xmlsectool.sh xmlsectool
 # The distribution is unpacked into /opt/fetched/mda-dist.
 #
 WORKDIR /opt
-ADD fetch-mda-snapshot .
-ADD snapshot-version.xsl .
-RUN ./fetch-mda-snapshot
+ADD fetch-mda .
+RUN ./fetch-mda
 WORKDIR /opt/fetched/mda-dist
 RUN chmod -R +r .
 RUN ln -s mda.sh mda

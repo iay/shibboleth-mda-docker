@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#
+# Fetch the Shibboleth MDA release to use.
+#
+# Requires:
+#
+# - wget
+#
+
+#
+# Exit when any command fails
+#
+set -e
+
+FILEBASE="mda-distribution-${MDA_RELEASE}"
+SRCDIR="https://shibboleth.net/downloads/metadata-aggregator/${MDA_RELEASE}"
+SRCURL="${SRCDIR}/${FILEBASE}"
+
+echo "Base URL: ${SRCURL}"
+wget -q "${SRCURL}.tar.gz"
+wget -q "${SRCURL}.tar.gz.asc"
+
+gpg --import PGP_KEYS
+gpg --verify "${FILEBASE}.tar.gz.asc"
+
+# Unpack and rename to standard directories
+tar xf ${FILEBASE}.tar.gz
+mkdir -p fetched
+mv ${FILEBASE} fetched/mda-dist
+
+# End.
