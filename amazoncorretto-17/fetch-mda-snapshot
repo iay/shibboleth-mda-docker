@@ -57,7 +57,7 @@ rm -rf $DEST
 mkdir $DEST
 cd $DEST
 
-# Fetch the IdP release
+# Fetch the release
 MDA_ARCHIVE=$MDA_PREFIX.tar.gz
 wget -O $MDA_ARCHIVE      $SRC_URI
 wget -O $MDA_ARCHIVE.sha1 $SRC_URI.sha1
@@ -66,11 +66,11 @@ wget -O $MDA_ARCHIVE.sha1 $SRC_URI.sha1
 checksum=$(cat $MDA_ARCHIVE.sha1)
 echo $checksum $MDA_ARCHIVE>$MDA_ARCHIVE.sha1
 
-# Verify SHA-1 checksum on IdP release
+# Verify SHA-1 checksum on release
 echo SHA-1 check for $MDA_ARCHIVE
 sha1sum --check $MDA_ARCHIVE.sha1
 
-# Unpack IdP and rename to standard directories
+# Unpack and rename to standard directories
 tar xf $MDA_ARCHIVE
 mv $MDA_PREFIX mda-dist
 
